@@ -10,9 +10,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import pe.com.softprogy.access.commons.domain.AccessResult;
 import pe.com.softprogy.access.commons.request.LoginRequest;
 import pe.com.softprogy.access.dao.LoginDAO;
+import pe.com.softprogy.access.dao.domain.AccessResult;
 import pe.com.softprogy.access.dao.sp.SPLogin;
 import pe.com.softprogy.security.beans.domain.User;
 import pe.com.softprogy.security.config.JwtAuthenticationException;

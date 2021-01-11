@@ -1,5 +1,5 @@
 
-package pe.com.softprogy.access.commons.domain;
+package pe.com.softprogy.access.dao.domain;
 
 public class AccessResult<T>
 {

@@ -11,9 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import pe.com.softprogy.access.commons.domain.AccessResult;
 import pe.com.softprogy.access.commons.request.LoginRequest;
 import pe.com.softprogy.access.dao.LoginDAO;
+import pe.com.softprogy.access.dao.domain.AccessResult;
 import pe.com.softprogy.access.enumeration.AccessCodeEnum;
 import pe.com.softprogy.security.beans.domain.User;
 import pe.com.softprogy.security.config.JwtAuthenticationException;

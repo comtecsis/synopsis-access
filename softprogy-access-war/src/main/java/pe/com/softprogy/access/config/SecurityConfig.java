@@ -4,6 +4,7 @@ package pe.com.softprogy.access.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.BeanIds;
@@ -73,8 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/v1/login").permitAll()
-                .antMatchers("/v1/client").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/v1/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/v1/client").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/v1/client").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/v1/client").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/v1/client").hasAnyRole("ADMIN", "CLIENT")
                 .antMatchers("/twilio/v1/catchMessage").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
