@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SoftprogyAccessApplication<softprogi-access>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "pe.com.softprogy.access.SoftprogyAccessApplication",
+            "projectName": "softprogi-access",
+            "args": ""
+        }
+    ]
+}

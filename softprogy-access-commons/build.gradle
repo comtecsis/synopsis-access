@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'maven'
+}
+
+group = 'pe.com.comtecsis'
+version = '0.0.1'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
+repositories {
+	mavenLocal()
+	jcenter()
+	mavenCentral()
+}
+
+ext{
+	springBootVersion = "2.2.4.RELEASE"
+	loomBookVersion = "1.18.10"
+	jacksonDatabindVersion = "2.10.2"
+	jackartaValidationVersion = "2.0.2"
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+	implementation "jakarta.validation:jakarta.validation-api:${jackartaValidationVersion}"
+	
+	compileOnly  "org.projectlombok:lombok:${loomBookVersion}"
+	annotationProcessor  "org.projectlombok:lombok:${loomBookVersion}"
+	
+	testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

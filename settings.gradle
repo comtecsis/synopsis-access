@@ -1,0 +1,2 @@
+rootProject.name = 'softprogi-access'
+include 'softprogy-access-war', 'softprogy-access-commons'

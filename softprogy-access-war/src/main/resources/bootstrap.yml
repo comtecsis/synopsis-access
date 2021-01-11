@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: softprogy-access
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://${SERVER_CONFIG:vm-ci}:8888
+
+server:
+  port: ${PORT:0}
+
+eureka:
+  instance:
+    instance-id:  ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://${SERVER_EUREKA:vm-ci}:8761/eureka
