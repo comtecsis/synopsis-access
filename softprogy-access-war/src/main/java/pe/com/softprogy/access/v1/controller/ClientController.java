@@ -9,18 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.com.softprogy.access.commons.dto.ClientDTO;
 import pe.com.softprogy.access.commons.dto.ClientListDTO;
 import pe.com.softprogy.access.commons.request.AddClientRequest;
 import pe.com.softprogy.access.commons.request.DeleteClientRequest;
+import pe.com.softprogy.access.commons.request.EditClientRequest;
 import pe.com.softprogy.access.commons.response.Response;
 import pe.com.softprogy.access.enumeration.AccessCodeEnum;
 import pe.com.softprogy.access.exception.AccessLogicException;
-import pe.com.softprogy.access.v1.dto.LoginDTO;
 import pe.com.softprogy.access.v1.service.ClientService;
 
 @RestController
@@ -33,11 +35,19 @@ public class ClientController
     private ClientService service;
 
     @PutMapping(value = "")
-    public ResponseEntity<Response<LoginDTO>> add(@Valid @RequestBody AddClientRequest client)
+    public ResponseEntity<Response<ClientDTO>> add(@Valid @RequestBody AddClientRequest client)
             throws AccessLogicException
     {
-        Response<LoginDTO> response = service.add(client);
-        return new ResponseEntity<Response<LoginDTO>>(response, HttpStatus.OK);
+        Response<ClientDTO> response = service.add(client);
+        return new ResponseEntity<Response<ClientDTO>>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "")
+    public ResponseEntity<Response<ClientDTO>> edit(@Valid @RequestBody EditClientRequest client)
+            throws AccessLogicException
+    {
+        Response<ClientDTO> response = service.edit(client);
+        return new ResponseEntity<Response<ClientDTO>>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "")

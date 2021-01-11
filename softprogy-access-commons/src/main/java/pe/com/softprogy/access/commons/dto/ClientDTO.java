@@ -23,12 +23,14 @@ public class ClientDTO implements Serializable
 
     public ClientDTO(UserEntity user)
     {
+        this.setId(user.getId());
         this.setEmail(user.getEmail());
         this.setName(user.getClient().getName());
         this.setPhone(user.getClient().getPhone());
         this.setFileImg(user.getClient().getFileImg());
     }
 
+    private Long id;
     private String email;
     private String phone;
     private String name;

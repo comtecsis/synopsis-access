@@ -22,12 +22,12 @@ import pe.com.softprogy.access.commons.repository.RoleEntityRepository;
 import pe.com.softprogy.access.commons.repository.UserEntityRepository;
 import pe.com.softprogy.access.commons.request.AddClientRequest;
 import pe.com.softprogy.access.commons.request.DeleteClientRequest;
+import pe.com.softprogy.access.commons.request.EditClientRequest;
 import pe.com.softprogy.access.commons.response.Response;
 import pe.com.softprogy.access.enumeration.AccessCodeEnum;
 import pe.com.softprogy.access.enumeration.LoginType;
 import pe.com.softprogy.access.enumeration.RoleType;
 import pe.com.softprogy.access.exception.AccessLogicException;
-import pe.com.softprogy.access.v1.dto.LoginDTO;
 import pe.com.softprogy.access.v1.service.ClientService;
 
 @Service
@@ -47,9 +47,9 @@ public class ClientServiceImpl implements ClientService
 
     @Override
     @Transactional
-    public Response<LoginDTO> add(AddClientRequest request) throws AccessLogicException
+    public Response<ClientDTO> add(AddClientRequest request) throws AccessLogicException
     {
-        Response<LoginDTO> response = new Response<LoginDTO>(AccessCodeEnum.OK.status());
+        Response<ClientDTO> response = new Response<ClientDTO>(AccessCodeEnum.OK.status());
         AccessLogicException exception;
         try
         {
@@ -71,6 +71,49 @@ public class ClientServiceImpl implements ClientService
                 clientEntity.setName(request.getName());
                 clientEntity = clientRepo.save(clientEntity);
 
+                response.setData(new ClientDTO(userEntity));
+                return response;
+
+            }
+            else
+            {
+                exception = new AccessLogicException(AccessCodeEnum.FAIL);
+            }
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            exception = new AccessLogicException(AccessCodeEnum.FAIL);
+        }
+        throw exception;
+    }
+
+    @Override
+    @Transactional
+    public Response<ClientDTO> edit(EditClientRequest request) throws AccessLogicException
+    {
+        Response<ClientDTO> response = new Response<ClientDTO>(AccessCodeEnum.OK.status());
+        AccessLogicException exception;
+        try
+        {
+            if (LoginType.EMAIL.isCode(request.getLoginType()))
+            {
+
+                Optional<UserEntity> optUserEntity = userRepo.findByIdAndEmailNot(request.getId(), request.getEmail());
+                if (optUserEntity.isPresent())
+                {
+                    UserEntity userEntity = optUserEntity.get();
+                    userEntity.setEmail(request.getEmail());
+
+                    ClientEntity clientEntity = userEntity.getClient();
+                    clientEntity.setName(request.getName());
+                    clientEntity.setPhone(request.getPhone());
+                    clientEntity = clientRepo.save(clientEntity);
+
+                    userEntity = userRepo.save(userEntity);
+                    response.setData(new ClientDTO(userEntity));
+                }
+                
                 return response;
 
             }
@@ -95,8 +138,8 @@ public class ClientServiceImpl implements ClientService
             Response<ClientListDTO> response = new Response<ClientListDTO>(AccessCodeEnum.OK.status());
             Iterable<UserEntity> users = userRepo.findAll();
             ClientListDTO listDTO = new ClientListDTO();
-            listDTO.setClients(StreamSupport.stream(users.spliterator(), false).map(ClientDTO::new)
-                    .collect(Collectors.toList()));
+            listDTO.setClients(
+                    StreamSupport.stream(users.spliterator(), false).map(ClientDTO::new).collect(Collectors.toList()));
             response.setData(listDTO);
             return response;
         }

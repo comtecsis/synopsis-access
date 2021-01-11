@@ -13,5 +13,6 @@ public interface UserEntityRepository extends CrudRepository<UserEntity, Long>
 {
 
     public Optional<UserEntity> findByEmail(String email);
+    public Optional<UserEntity> findByIdAndEmailNot(Long id, String email);
     
 }
