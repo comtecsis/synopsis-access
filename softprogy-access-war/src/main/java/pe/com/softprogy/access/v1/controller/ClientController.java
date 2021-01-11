@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import pe.com.softprogy.access.commons.response.Response;
 import pe.com.softprogy.access.enumeration.AccessCodeEnum;
 import pe.com.softprogy.access.exception.AccessLogicException;
 import pe.com.softprogy.access.v1.service.ClientService;
+import pe.com.softprogy.security.config.SecurityToken;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -35,18 +37,18 @@ public class ClientController
     private ClientService service;
 
     @PutMapping(value = "")
-    public ResponseEntity<Response<ClientDTO>> add(@Valid @RequestBody AddClientRequest client)
-            throws AccessLogicException
+    public ResponseEntity<Response<ClientDTO>> add(@AuthenticationPrincipal SecurityToken token,
+            @Valid @RequestBody AddClientRequest client) throws AccessLogicException
     {
-        Response<ClientDTO> response = service.add(client);
+        Response<ClientDTO> response = service.add(token.getUserInfo(), client);
         return new ResponseEntity<Response<ClientDTO>>(response, HttpStatus.OK);
     }
-    
+
     @PostMapping(value = "")
-    public ResponseEntity<Response<ClientDTO>> edit(@Valid @RequestBody EditClientRequest client)
-            throws AccessLogicException
+    public ResponseEntity<Response<ClientDTO>> edit(@AuthenticationPrincipal SecurityToken token,
+            @Valid @RequestBody EditClientRequest client) throws AccessLogicException
     {
-        Response<ClientDTO> response = service.edit(client);
+        Response<ClientDTO> response = service.edit(token.getUserInfo(), client);
         return new ResponseEntity<Response<ClientDTO>>(response, HttpStatus.OK);
     }
 
@@ -58,9 +60,10 @@ public class ClientController
     }
 
     @DeleteMapping(value = "")
-    public ResponseEntity<Response<String>> delete(@Valid @RequestBody DeleteClientRequest client) throws AccessLogicException
+    public ResponseEntity<Response<String>> delete(@AuthenticationPrincipal SecurityToken token,
+            @Valid @RequestBody DeleteClientRequest client) throws AccessLogicException
     {
-        service.delete(client);
+        service.delete(token.getUserInfo(), client);
         return new ResponseEntity<Response<String>>(AccessCodeEnum.OK.createResponse(), HttpStatus.OK);
     }
 

@@ -17,6 +17,9 @@ public enum AccessCodeEnum
     NOT_AUTHENTICATED(AccessContext.LOGIC, 1, "No se encuentra autenticado."), 
     MIMETYPE_INVALID(AccessContext.LOGIC, 2, "El tipo de dato es inválido."), 
     STORE_PROCEDURE(AccessContext.LOGIC, 3, "Error inesperado."), 
+    EXIST_EMAIL(AccessContext.LOGIC, 5, "Email ya registrado."),
+    EXIST_PHONE(AccessContext.LOGIC, 6, "Celular ya registrado."),
+    EXIST_FIELD(AccessContext.LOGIC, 7, "Uno de los datos ya está registrado."),
     FAIL(AccessContext.LOGIC, 1000, "Error inesperado."),
 
     RESOURCE_NOT_EXIST(AccessContext.STORE_PROCEDURE, 1, "Recurso no existe.");

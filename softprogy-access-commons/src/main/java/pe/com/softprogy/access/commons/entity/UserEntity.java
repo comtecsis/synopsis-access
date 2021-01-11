@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -25,11 +23,7 @@ public class UserEntity implements Serializable
 
     @Id
     @Column(name = "PK_USER")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "TXT_EMAIL")
-    private String email;
 
     @Column(name = "TXT_PASS")
     private String accessKey;
@@ -37,9 +31,5 @@ public class UserEntity implements Serializable
     @OneToOne
     @JoinColumn(name = "PK_USER", referencedColumnName = "PK_ROLE")
     private RoleEntity role;
-
-    @OneToOne
-    @JoinColumn(name = "PK_USER", referencedColumnName = "PK_CLIENT")
-    private ClientEntity client;
 
 }

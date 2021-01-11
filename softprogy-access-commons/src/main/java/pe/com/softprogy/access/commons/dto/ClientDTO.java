@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
-import pe.com.softprogy.access.commons.entity.UserEntity;
+import pe.com.softprogy.access.commons.entity.ClientEntity;
 import pe.com.softprogy.access.commons.utils.Constants;
 
 @Data
@@ -21,13 +21,13 @@ public class ClientDTO implements Serializable
     {
     }
 
-    public ClientDTO(UserEntity user)
+    public ClientDTO(ClientEntity client)
     {
-        this.setId(user.getId());
-        this.setEmail(user.getEmail());
-        this.setName(user.getClient().getName());
-        this.setPhone(user.getClient().getPhone());
-        this.setFileImg(user.getClient().getFileImg());
+        this.setId(client.getId());
+        this.setEmail(client.getEmail());
+        this.setName(client.getName());
+        this.setPhone(client.getPhone());
+        this.setFileImg(client.getFileImg());
     }
 
     private Long id;
