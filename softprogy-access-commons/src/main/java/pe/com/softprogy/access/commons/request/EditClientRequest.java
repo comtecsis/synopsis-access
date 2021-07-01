@@ -18,11 +18,7 @@ public class EditClientRequest implements Serializable
     
     @NotNull
     private String name;
-
-    @NotNull
-    private String email;
-
-    private String phone;
+    
     private String loginType;
 
 }

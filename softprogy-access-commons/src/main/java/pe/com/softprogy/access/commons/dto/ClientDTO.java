@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 import pe.com.softprogy.access.commons.entity.ClientEntity;
+import pe.com.softprogy.access.commons.entity.UserEntity;
 import pe.com.softprogy.access.commons.utils.Constants;
 
 @Data
@@ -24,9 +25,16 @@ public class ClientDTO implements Serializable
     public ClientDTO(ClientEntity client)
     {
         this.setId(client.getId());
-        this.setEmail(client.getEmail());
         this.setName(client.getName());
-        this.setPhone(client.getPhone());
+        this.setFileImg(client.getFileImg());
+    }
+
+    public ClientDTO(ClientEntity client, UserEntity user)
+    {
+        this.setId(client.getId());
+        this.setEmail(user.getEmail());
+        this.setPhone(user.getPhone());
+        this.setName(client.getName());
         this.setFileImg(client.getFileImg());
     }
 

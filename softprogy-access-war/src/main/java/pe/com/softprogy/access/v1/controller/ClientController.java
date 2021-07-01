@@ -36,7 +36,7 @@ public class ClientController
     @Autowired
     private ClientService service;
 
-    @PutMapping(value = "")
+    @PostMapping(value = "")
     public ResponseEntity<Response<ClientDTO>> add(@AuthenticationPrincipal SecurityToken token,
             @Valid @RequestBody AddClientRequest client) throws AccessLogicException
     {
@@ -44,7 +44,7 @@ public class ClientController
         return new ResponseEntity<Response<ClientDTO>>(response, HttpStatus.OK);
     }
 
-    @PostMapping(value = "")
+    @PutMapping(value = "")
     public ResponseEntity<Response<ClientDTO>> edit(@AuthenticationPrincipal SecurityToken token,
             @Valid @RequestBody EditClientRequest client) throws AccessLogicException
     {

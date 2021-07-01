@@ -59,24 +59,24 @@ public class ClientServiceImpl implements ClientService
             if (LoginType.EMAIL.isCode(request.getLoginType()))
             {
 
-                ClientEntity clientEntity = new ClientEntity();
-                clientEntity.setEmail(request.getEmail());
-                clientEntity.setName(request.getName());
-                clientEntity.setPhone(request.getPhone());
-                clientEntity.setFkUser(userInfo.getUserId());
-                clientEntity = clientRepo.save(clientEntity);
-
                 UserEntity userEntity = new UserEntity();
-                userEntity.setId(clientEntity.getId());
+                userEntity.setEmail(request.getEmail());
+                userEntity.setPhone(request.getPhone());
                 userEntity.setAccessKey(request.getPassword());
                 userEntity = userRepo.save(userEntity);
+
+                ClientEntity clientEntity = new ClientEntity();
+                clientEntity.setId(userEntity.getId());
+                clientEntity.setName(request.getName());
+                clientEntity.setFkUser(userInfo.getUserId());
+                clientEntity = clientRepo.save(clientEntity);
 
                 RoleEntity roleEntity = new RoleEntity();
                 roleEntity.setId(userEntity.getId());
                 roleEntity.setName(RoleType.CLIENT.getCode());
                 roleEntity = roleRepo.save(roleEntity);
 
-                response.setData(new ClientDTO(clientEntity));
+                response.setData(new ClientDTO(clientEntity, userEntity));
                 return response;
 
             }
@@ -116,14 +116,11 @@ public class ClientServiceImpl implements ClientService
             if (LoginType.EMAIL.isCode(request.getLoginType()))
             {
 
-                Optional<ClientEntity> optUserEntity = clientRepo.findByIdAndEmailNotAndFkUser(request.getId(),
-                        request.getEmail(), userInfo.getUserId());
+                Optional<ClientEntity> optUserEntity = clientRepo.findById(request.getId());
                 if (optUserEntity.isPresent())
                 {
                     ClientEntity clientEntity = optUserEntity.get();
                     clientEntity.setName(request.getName());
-                    clientEntity.setPhone(request.getPhone());
-                    clientEntity.setEmail(request.getEmail());
                     clientEntity = clientRepo.save(clientEntity);
 
                     response.setData(new ClientDTO(clientEntity));
@@ -171,14 +168,14 @@ public class ClientServiceImpl implements ClientService
     {
         try
         {
-            Optional<ClientEntity> optUserEntity = clientRepo.findByFkUserAndEmail(userInfo.getUserId(),
+            Optional<UserEntity> optUserEntity = userRepo.findByIdAndEmail(userInfo.getUserId(),
                     login.getEmail());
             if (optUserEntity.isPresent())
             {
-                ClientEntity clientEntity = optUserEntity.get();
-                roleRepo.delete(clientEntity.getUser().getRole());
-                userRepo.delete(clientEntity.getUser());
-                clientRepo.delete(clientEntity);
+                UserEntity clientEntity = optUserEntity.get();
+                roleRepo.delete(clientEntity.getRole());
+                clientRepo.delete(clientEntity.getClient());
+                userRepo.delete(clientEntity);
             }
         }
         catch (Exception e)

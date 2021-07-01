@@ -111,7 +111,7 @@ END$$
 DELIMITER ;
 
 INSERT INTO `softprogy_access`.`user` (TXT_EMAIL, TXT_PHONE, TXT_PASS) VALUES ('elvisperez.tec@gmail.com', '948573560', '123456');
-INSERT INTO `softprogy_access`.`client` (PK_CLIENT, TXT_NAME) VALUES (1, 'Elvis Perez');
+INSERT INTO `softprogy_access`.`client` (PK_CLIENT, TXT_NAME, FK_USER) VALUES (1, 'Elvis Perez', NULL);
 INSERT INTO `softprogy_access`.`role` (PK_ROLE, TXT_ROLE) VALUES (1, 'ROLE_ADMIN');
 
 SET SQL_MODE=@OLD_SQL_MODE;
