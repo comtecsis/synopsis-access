@@ -10,45 +10,40 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 CREATE SCHEMA `softprogy_access`;
-ALTER SCHEMA `softprogy_access`  DEFAULT CHARACTER SET utf8  DEFAULT COLLATE utf8_spanish2_ci ;
-
+/* ALTER SCHEMA `softprogy_access`  DEFAULT CHARACTER SET utf8  DEFAULT COLLATE utf8_spanish2_ci ; */
 
 /**
  * Dependencies:
  * - None
  **/
-CREATE TABLE IF NOT EXISTS `softprogy_access`.`client` (
-  `PK_CLIENT` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `TXT_EMAIL` VARCHAR(45) NULL DEFAULT NULL,
-  `TXT_NAME` VARCHAR(45) NOT NULL,
-  `TXT_PHONE` VARCHAR(45) NULL DEFAULT NULL,
-  `FILE_IMG` MEDIUMBLOB NULL DEFAULT NULL,
-  `FK_USER` INT(10) NULL,
-  PRIMARY KEY (`PK_CLIENT`),
+CREATE TABLE IF NOT EXISTS `softprogy_access`.`user` (
+  `PK_USER` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `TXT_EMAIL` VARCHAR(45) NOT NULL,
+  `TXT_PHONE` VARCHAR(45) NOT NULL,
+  `TXT_PASS` VARCHAR(45) NOT NULL,
+  `TXT_STATUS` ENUM('CLIENT', 'BY_CONFIRM', 'ACTIVE', 'INACTIVE') NULL DEFAULT 'CLIENT',
+  PRIMARY KEY (`PK_USER`),
   UNIQUE INDEX `TXT_EMAIL_UNIQUE` (`TXT_EMAIL` ASC),
   UNIQUE INDEX `TXT_PHONE_UNIQUE` (`TXT_PHONE` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_spanish2_ci;
+ENGINE = InnoDB;
 
 /**
  * Dependencies:
  * - softprogy-access:
- *   :: Table: `softprogy_access`.`client`
+ *   :: Table: `softprogy_access`.`user`
  **/
-CREATE TABLE IF NOT EXISTS `softprogy_access`.`user` (
-  `PK_USER` INT(10) UNSIGNED NOT NULL,
-  `TXT_PASS` VARCHAR(45) NOT NULL,
-  `TXT_STATUS` ENUM('CLIENT', 'BY_CONFIRM', 'ACTIVE', 'INACTIVE') NULL DEFAULT 'CLIENT',
-  PRIMARY KEY (`PK_USER`),
-  CONSTRAINT `fk_user_client`
-    FOREIGN KEY (`PK_USER`)
-    REFERENCES `softprogy_access`.`client` (`PK_CLIENT`)
+CREATE TABLE IF NOT EXISTS `softprogy_access`.`client` (
+  `PK_CLIENT` INT(10) UNSIGNED NOT NULL,
+  `TXT_NAME` VARCHAR(45) NOT NULL,
+  `FILE_IMG` MEDIUMBLOB NULL DEFAULT NULL,
+  `FK_USER` INT(10) NULL,
+  PRIMARY KEY (`PK_CLIENT`),
+  CONSTRAINT `fk_client_user`
+    FOREIGN KEY (`PK_CLIENT`)
+    REFERENCES `softprogy_access`.`user` (`PK_USER`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_spanish2_ci;
+ENGINE = InnoDB;
 
 /**
  * Dependencies:
@@ -64,9 +59,7 @@ CREATE TABLE IF NOT EXISTS `softprogy_access`.`role` (
     REFERENCES `softprogy_access`.`user` (`PK_USER`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_spanish2_ci;
+ENGINE = InnoDB;
 
 /**
  * Dependencies:
@@ -87,9 +80,7 @@ CREATE TABLE IF NOT EXISTS `softprogy_access`.`document` (
     REFERENCES `softprogy_access`.`user` (`PK_USER`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_spanish2_ci;
+ENGINE = InnoDB;
 
 /**
  * Dependencies:
@@ -100,13 +91,14 @@ COLLATE = utf8_spanish2_ci;
  **/
 DELIMITER $$
 USE `softprogy_access`$$
+DROP PROCEDURE `SP_LOGIN`$$
 CREATE PROCEDURE `SP_LOGIN` (
 	OUT `status` VARCHAR(4),
   IN `email` VARCHAR(45),
 	IN `password` VARCHAR(45)
 )
 BEGIN
-    SELECT a.PK_USER, b.TXT_NAME, b.TXT_EMAIL, b.TXT_PHONE, c.TXT_ROLE, b.FILE_IMG IS NOT NULL as existImage
+    SELECT a.PK_USER, b.TXT_NAME, a.TXT_EMAIL, a.TXT_PHONE, c.TXT_ROLE, b.FILE_IMG IS NOT NULL as existImage
     FROM `user` a
     INNER JOIN `client` b
     ON a.PK_USER = b.PK_CLIENT
@@ -118,8 +110,8 @@ END$$
 
 DELIMITER ;
 
-INSERT INTO `softprogy_access`.`client` (TXT_NAME, TXT_EMAIL, TXT_PHONE) VALUES ('Elvis Perez', 'elvisperez.tec@gmail.com', '948573560');
-INSERT INTO `softprogy_access`.`user` (PK_USER, TXT_PASS) VALUES (1, '123456');
+INSERT INTO `softprogy_access`.`user` (TXT_EMAIL, TXT_PHONE, TXT_PASS) VALUES ('elvisperez.tec@gmail.com', '948573560', '123456');
+INSERT INTO `softprogy_access`.`client` (PK_CLIENT, TXT_NAME) VALUES (1, 'Elvis Perez');
 INSERT INTO `softprogy_access`.`role` (PK_ROLE, TXT_ROLE) VALUES (1, 'ROLE_ADMIN');
 
 SET SQL_MODE=@OLD_SQL_MODE;
